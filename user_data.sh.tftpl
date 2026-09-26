@@ -1,0 +1,33 @@
+#!/bin/bash
+set -euxo pipefail
+
+dnf update -y
+dnf install -y httpd php php-fpm php-mysqlnd php-cli php-json ruby wget
+
+systemctl enable --now httpd
+systemctl enable --now php-fpm
+
+# CodeDeploy agent installation.
+# For production, consider baking the agent into a golden AMI or installing
+# it using Systems Manager State Manager.
+cd /tmp
+wget -q "https://aws-codedeploy-${region}.s3.${region}.amazonaws.com/latest/install" -O install-codedeploy
+chmod +x install-codedeploy
+./install-codedeploy auto
+
+systemctl enable codedeploy-agent
+systemctl restart codedeploy-agent
+
+mkdir -p /var/www/html
+chown -R apache:apache /var/www/html
+
+# The application itself is intentionally NOT copied here.
+# CodeDeploy delivers the GitHub revision after the infrastructure exists.
+
+cat > /var/www/html/health.php <<'PHP'
+<?php
+http_response_code(200);
+echo "OK";
+?>
+PHP
+chown apache:apache /var/www/html/health.php
