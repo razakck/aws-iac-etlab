@@ -1,9 +1,4 @@
-provider "aws"   {
-    alias = "Asia-Hyderabad"
-region     = "ap-south-2"
-  access_key = "AKIAZIF5OOTBSICF7TFK"
-  secret_key ="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"
-}
+
 
 data "aws_ssm_parameter" "al2023_ami" {
   name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
