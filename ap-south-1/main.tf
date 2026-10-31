@@ -2,8 +2,6 @@ provider "aws"   {
     alias = "Asia-Hyderabad"
 region     = "ap-south-1"
 profile = "etlab-prod-XXX"
-  # access_key = "AKIAQF73JQB6LQGEGRYB"
-  # secret_key ="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"
 }
 
 data "aws_ssm_parameter" "al2023_ami" {
