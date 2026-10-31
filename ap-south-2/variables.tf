@@ -1,11 +1,11 @@
 variable "aws_region" {
   type    = string
-  default = "ap-south-1"
+  default = "ap-south-2"
 }
 
 variable "project_name" {
   type    = string
-  default = "aws-etlab-iac"
+  default = "aws-etlab-prod"
 }
 
 variable "github_org" {
@@ -17,7 +17,7 @@ variable "github_org" {
 variable "github_repo" {
   description = "aws-iac-etlab"
   type        = string
-  default = "aws-deploy-php-app@1359034496"
+  default = "etlab-core@1359034496"
 }
 
 variable "vpc_cidr" {
@@ -27,7 +27,7 @@ variable "vpc_cidr" {
 
 variable "azs" {
   type    = list(string)
-  default = ["ap-south-1a", "ap-south-1b"]
+  default = ["ap-south-2a", "ap-south-2b"]
 }
 
 variable "public_subnet_cidrs" {
@@ -79,12 +79,12 @@ variable "db_password" {
   description = "Assignment password. Use Secrets Manager instead for production."
   type        = string
   sensitive   = true
-  default     = "etlabpass"
+  default     = "yMhxhKauxT8LuWgjUmTz"
 }
 
 variable "db_engine_version" {
   type    = string
-  default = "8.0"
+  default = "8.4"
 }
 
 variable "website_hostname" {
@@ -93,11 +93,11 @@ variable "website_hostname" {
   default     = "etlab.com"
 }
 
-variable "route53_zone_name" {
-  description = "Existing public Route 53 zone, e.g. example.com"
-  type        = string
-  default     = "etlabappzone"
-}
+# variable "route53_zone_name" {
+#   description = "Existing public Route 53 zone, e.g. example.com"
+#   type        = string
+#   default     = "etlabappzone"
+# }
 
 variable "enable_https" {
   description = "Set true only after an ACM certificate ARN is provided."
@@ -115,4 +115,22 @@ variable "deployment_config_name" {
   description = "CodeDeploy deployment configuration."
   type        = string
   default     = "CodeDeployDefault.HalfAtATime"
+}
+
+
+variable "db_backup_s3_bucket" {
+  type        = string
+  description = "etlabdbbackup"
+  default     = "etlabdbbackup"
+}
+
+variable "db_backup_s3_prefix" {
+  type        = string
+  description = "dbbackup"
+  default     = "dbbackup"
+}
+variable "aws_image_id" {
+  type        = string
+  description = "AMI ID for the EC2 instances"
+  default     = "ami-0ed819c9d1237d1f2"
 }

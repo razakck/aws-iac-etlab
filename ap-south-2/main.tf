@@ -1,13 +1,32 @@
 
 
-data "aws_ssm_parameter" "al2023_ami" {
-  name = "/aws/service/ami-amazon-linux-latest/al2023-ami-kernel-default-x86_64"
+terraform {
+  required_version = ">= 1.6.0"
+
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
 }
+
+provider "aws"   {
+    alias = "Asia-Hyderabad"
+region = var.aws_region
+profile = "etlab-prod"
+}
+
+# data "aws_ssm_parameter" "al2023_ami" {
+#   name = "ami-0ccc2f3b5d3e2b1be"
+  
+# }
 
 locals {
   common_tags = {
     Project   = var.project_name
     ManagedBy = "Terraform"
+    Environment = "Production"
   }
 
   github_subject = "repo:${var.github_org}/${var.github_repo}:ref:refs/heads/main"
@@ -65,38 +84,38 @@ resource "aws_codedeploy_deployment_group" "php" {
 
 
 
-data "aws_route53_zone" "selected" {
-  count        = var.route53_zone_name != "" ? 1 : 0
-  name         = var.route53_zone_name
-  private_zone = false
-}
+# data "aws_route53_zone" "selected" {
+#   count        = var.route53_zone_name != "" ? 1 : 0
+#   name         = var.route53_zone_name
+#   private_zone = false
+# }
 
-resource "aws_route53_record" "app_primary" {
-  zone_id = data.aws_route53_zone.selected[0].zone_id
-  name    = var.website_hostname
-  type    = "A"
+# resource "aws_route53_record" "app_primary" {
+#   zone_id = data.aws_route53_zone.selected[0].zone_id
+#   name    = var.website_hostname
+#   type    = "A"
 
-  set_identifier = "primary"
+#   set_identifier = "primary"
 
-  failover_routing_policy {
-    type = "PRIMARY"
-  }
+#   failover_routing_policy {
+#     type = "PRIMARY"
+#   }
 
-  alias {
-    name                   = aws_lb.app.dns_name
-    zone_id                = aws_lb.app.zone_id
-    evaluate_target_health = true
-  }
-}
+#   alias {
+#     name                   = aws_lb.app.dns_name
+#     zone_id                = aws_lb.app.zone_id
+#     evaluate_target_health = true
+#   }
+# }
 
-resource "aws_route53_health_check" "primary" {
-  fqdn              = aws_lb.app.dns_name
-  port              = 443
-  type              = "HTTPS"
-  resource_path     = "/health/ready"
-  request_interval  = 30
-  failure_threshold = 3
-}
+# resource "aws_route53_health_check" "primary" {
+#   fqdn              = aws_lb.app.dns_name
+#   port              = 443
+#   type              = "HTTPS"
+#   resource_path     = "/health/ready"
+#   request_interval  = 30
+#   failure_threshold = 3
+# }
 # resource "aws_route53_record" "app_secondary" {
 #   zone_id = data.aws_route53_zone.selected[0].zone_id
 #   name    = var.website_hostname

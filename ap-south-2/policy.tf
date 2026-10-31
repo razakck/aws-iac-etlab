@@ -150,7 +150,7 @@ resource "aws_iam_role" "codedeploy" {
     } ,  {
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::846964403494:role/aws-capstone-iac-github-actions"
+        "AWS": aws_iam_role.github_actions.arn
       },
       "Action": "sts:AssumeRole"
     }]

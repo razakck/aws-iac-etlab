@@ -24,13 +24,15 @@ output "github_actions_role_arn" {
 
 output "rds_endpoint" {
   value     = aws_db_instance.mysql.address
-  sensitive = true
+  sensitive = false
 }
 
 output "asg_name" {
   value = aws_autoscaling_group.app.name
 }
-
-output "route53_hostname" {
-  value = var.website_hostname != "" && var.route53_zone_name != "" ? "http://${var.website_hostname}" : "Route53 record not configured"
-}
+# output "vpc_endpoint_name" {
+#   value = aws_vpc_endpoint.name
+# }
+# output "route53_hostname" {
+#   value = var.website_hostname != "" && var.route53_zone_name != "" ? "http://${var.website_hostname}" : "Route53 record not configured"
+# }

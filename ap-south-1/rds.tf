@@ -4,12 +4,13 @@
 # -------------------------
 resource "aws_db_subnet_group" "rds" {
   name       = "${var.project_name}-rds-subnets"
-  subnet_ids = aws_subnet.private[*].id
+  subnet_ids = aws_subnet.public[*].id
 
   tags = merge(local.common_tags, {
     Name = "${var.project_name}-rds-subnets"
   })
 }
+
 resource "aws_db_instance" "mysql" {
   identifier              = "${var.project_name}-mysql"
   engine                  = "mysql"
